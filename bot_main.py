@@ -23,7 +23,7 @@ import psutil
 #  CONFIG
 # ══════════════════════════════════════════════════════════════
 
-BOT_TOKEN     = os.environ.get("8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
+BOT_TOKEN     = os.environ.get("BOT_TOKEN", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
 ADMIN_ID      = 7082733957
 LOG_CHANNEL   = -1003608585339
 FORCE_CHANNEL = "exhaustbots"
@@ -108,13 +108,13 @@ crash_notifications: list = []
 # ══════════════════════════════════════════════════════════════
 
 def btn_primary(text: str, cbd: str) -> InlineKeyboardButton:
-    return InlineKeyboardButton(text, callback_data=cbd, style="primary")
+    return InlineKeyboardButton(text, callback_data=cbd)
 
 def btn_success(text: str, cbd: str) -> InlineKeyboardButton:
-    return InlineKeyboardButton(text, callback_data=cbd, style="success")
+    return InlineKeyboardButton(text, callback_data=cbd)
 
 def btn_danger(text: str, cbd: str) -> InlineKeyboardButton:
-    return InlineKeyboardButton(text, callback_data=cbd, style="danger")
+    return InlineKeyboardButton(text, callback_data=cbd)
 
 def btn_plain(text: str, cbd: str) -> InlineKeyboardButton:
     return InlineKeyboardButton(text, callback_data=cbd)
@@ -239,7 +239,7 @@ async def check_force_join(uid: int, bot) -> bool:
 def force_join_kb() -> InlineKeyboardMarkup:
     fc = users_db.get("force_channel", FORCE_CHANNEL)
     return InlineKeyboardMarkup([
-        [btn_success("✅ Join Channel", f"https://t.me/{fc}")._replace()],
+        [btn_url("✅ Join Channel", f"https://t.me/{fc}")],
         [btn_primary("🔄 I Joined — Check", "nav_menu")],
     ])
 
@@ -516,3 +516,7 @@ async def nav_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await q.edit_message_text(txt, parse_mode="Markdown", reply_markup=get_menu(user.id))
         except Exception: pass
 
+    # ── My Bots ──
+    elif action == "bots":
+        txt, kb = build_bot_list(user.id)
+        if tx
