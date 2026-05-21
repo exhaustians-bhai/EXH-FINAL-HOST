@@ -23,7 +23,7 @@ import psutil
 #  CONFIG
 # ══════════════════════════════════════════════════════════════
 
-BOT_TOKEN     = os.environ.get("8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
+BOT_TOKEN     = os.environ.get("BOT_TOKEN", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
 ADMIN_ID      = 7082733957
 LOG_CHANNEL   = -1003608585339
 FORCE_CHANNEL = "exhaustbots"
@@ -519,4 +519,4 @@ async def nav_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     # ── My Bots ──
     elif action == "bots":
         txt, kb = build_bot_list(user.id)
-        if tx 
+        if tx
