@@ -23,7 +23,7 @@ import psutil
 #  CONFIG
 # ══════════════════════════════════════════════════════════════
 
-BOT_TOKEN     = os.environ.get("BOT_TOKEN", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
+BOT_TOKEN     = os.environ.get("8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM", "8898666736:AAEUXN8pgeYpDLkMFmNK1YO0JZh_LUTUxfM")
 ADMIN_ID      = 7082733957
 LOG_CHANNEL   = -1003608585339
 FORCE_CHANNEL = "exhaustbots"
