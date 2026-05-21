@@ -519,4 +519,4 @@ async def nav_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     # ── My Bots ──
     elif action == "bots":
         txt, kb = build_bot_list(user.id)
-        if tx
+        if tx 
