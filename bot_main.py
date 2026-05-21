@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
-\u2551      EXHAUST HOSTING \u2014 Bot Platform      \u2551
-\u2551   24/7 Python Bot Hosting | Ultra Pro    \u2551
-\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
-Colored buttons  \u00b7 User isolation  \u00b7 Credit system
-Force join       \u00b7 Self-keepalive  \u00b7 Crash watchdog
+╔══════════════════════════════════════════╗
+║      EXHAUST HOSTING — Bot Platform      ║
+║   24/7 Python Bot Hosting | Ultra Pro    ║
+╚══════════════════════════════════════════╝
+Colored buttons  · User isolation  · Credit system
+Force join       · Self-keepalive  · Crash watchdog
 """
 
 import os, sys, asyncio, json, zipfile, shutil, subprocess
@@ -23,7 +23,7 @@ import psutil
 #  CONFIG
 # ══════════════════════════════════════════════════════════════
 
-BOT_TOKEN     = os.environ.get("BOT_TOKEN", "")
+BOT_TOKEN     = os.environ.get("8627261499:AAHGBamnJDpsMz7MlVdufl9j3P3I9x2lKgk", "8627261499:AAHGBamnJDpsMz7MlVdufl9j3P3I9x2lKgk")
 ADMIN_ID      = 7082733957
 LOG_CHANNEL   = -1003608585339
 FORCE_CHANNEL = "exhaustbots"
@@ -53,7 +53,7 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 _KA_PORT = int(os.environ.get("PORT", 8080))
 
 
-def _detect_external_url() -> str:
+def _detect_external_url() -> str | None:
     """Auto-detect this app's public URL from known platform env vars."""
     # Manual override — sabse reliable
     if os.environ.get("SELF_URL"):
@@ -90,27 +90,27 @@ class _HealthHandler(http.server.BaseHTTPRequestHandler):
 def start_keepalive():
     """
     1. HTTP health server chalata hai (platform ki nazar mein port active)
-    2. Bahari URL detect karke ping karta hai \u2014 platform ko lagta hai traffic aa raha hai
-    3. Har 4 min pe ping \u2192 free tier pe bhi kabhi sleep nahi aayega
+    2. Bahari URL detect karke ping karta hai — platform ko lagta hai traffic aa raha hai
+    3. Har 4 min pe ping → free tier pe bhi kabhi sleep nahi aayega
     """
     server_started = False
     try:
         srv = http.server.HTTPServer(("0.0.0.0", _KA_PORT), _HealthHandler)
         threading.Thread(target=srv.serve_forever, daemon=True).start()
         server_started = True
-        print(f"\u2705 Health server :{_KA_PORT}", flush=True)
+        print(f"✅ Health server :{_KA_PORT}", flush=True)
     except Exception as e:
-        print(f"[KA] Health server port {_KA_PORT} busy ({e}) \u2014 ping only mode", flush=True)
+        print(f"[KA] Health server port {_KA_PORT} busy ({e}) — ping only mode", flush=True)
 
     ext_url = _detect_external_url()
     local_url = f"http://localhost:{_KA_PORT}/"
 
     if ext_url:
         ping_url = ext_url + "/"
-        print(f"\u2705 External keepalive URL: {ping_url}", flush=True)
+        print(f"✅ External keepalive URL: {ping_url}", flush=True)
     else:
         ping_url = local_url
-        print(f"\u26a0\ufe0f  No external URL found \u2014 using localhost ping", flush=True)
+        print(f"⚠️  No external URL found — using localhost ping", flush=True)
         print(f"   Tip: SELF_URL env var set karo apne app ke URL se!", flush=True)
 
     def _ping():
@@ -132,19 +132,19 @@ def start_keepalive():
 
     threading.Thread(target=_ping, daemon=True).start()
     mode = f"external ({ext_url})" if ext_url else "localhost (fallback)"
-    print(f"\u2705 Self-ping keepalive ON \u2014 every 4 min \u2192 {mode}", flush=True)
+    print(f"✅ Self-ping keepalive ON — every 4 min → {mode}", flush=True)
 
 
 # ══════════════════════════════════════════════════════════════
 #  PLANS
 # ══════════════════════════════════════════════════════════════
 
-PLANS: dict = {
-    "free":      {"limit": 4,  "price": 0,   "label": "Free",      "emoji": "\U0001f193"},
-    "starter":   {"limit": 6,  "price": 100,  "label": "Starter",   "emoji": "\U0001f949"},
-    "pro":       {"limit": 15, "price": 200,  "label": "Pro",       "emoji": "\U0001f948"},
-    "ultra":     {"limit": 50, "price": 300,  "label": "Ultra",     "emoji": "\U0001f947"},
-    "unlimited": {"limit": -1, "price": 500,  "label": "Unlimited", "emoji": "\U0001f48e"},
+PLANS: dict[str, dict] = {
+    "free":      {"limit": 4,  "price": 0,   "label": "Free",      "emoji": "🆓"},
+    "starter":   {"limit": 6,  "price": 100,  "label": "Starter",   "emoji": "🥉"},
+    "pro":       {"limit": 15, "price": 200,  "label": "Pro",       "emoji": "🥈"},
+    "ultra":     {"limit": 50, "price": 300,  "label": "Ultra",     "emoji": "🥇"},
+    "unlimited": {"limit": -1, "price": 500,  "label": "Unlimited", "emoji": "💎"},
 }
 
 # ══════════════════════════════════════════════════════════════
@@ -185,11 +185,11 @@ def btn_url(text: str, url: str) -> InlineKeyboardButton:
     return InlineKeyboardButton(text, url=url)
 
 def btn_deeplink(text: str, action: str) -> InlineKeyboardButton:
-    """Deep-link button \u2014 opens a fresh /start message."""
+    """Deep-link button — opens a fresh /start message."""
     return InlineKeyboardButton(text, url=f"https://t.me/{BOT_USERNAME}?start={action}")
 
 def back_kb(action: str = "menu") -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup([[btn_primary("\U0001f3e0 Main Menu", f"nav_{action}")]])
+    return InlineKeyboardMarkup([[btn_primary("🏠 Main Menu", f"nav_{action}")]])
 
 # ══════════════════════════════════════════════════════════════
 #  PERSISTENCE
@@ -301,8 +301,8 @@ async def check_force_join(uid: int, bot) -> bool:
 def force_join_kb() -> InlineKeyboardMarkup:
     fc = users_db.get("force_channel", FORCE_CHANNEL)
     return InlineKeyboardMarkup([
-        [btn_success("\u2705 Join Channel", f"https://t.me/{fc}")._replace()],
-        [btn_primary("\U0001f504 I Joined \u2014 Check", "nav_menu")],
+        [btn_success("✅ Join Channel", f"https://t.me/{fc}")._replace()],
+        [btn_primary("🔄 I Joined — Check", "nav_menu")],
     ])
 
 # ══════════════════════════════════════════════════════════════
@@ -319,7 +319,7 @@ def get_status(bot_id: str) -> str:
     return "stopped"
 
 
-def start_bot(bot_id: str) -> tuple:
+def start_bot(bot_id: str) -> tuple[bool, str]:
     if bot_id not in running_bots: return False, "Bot nahi mila."
     info = running_bots[bot_id]
     p = Path(info["path"])
@@ -336,19 +336,19 @@ def start_bot(bot_id: str) -> tuple:
         cmd, cwd = [sys.executable, str(main)], str(p)
     try:
         lf = open(BOTS_DIR / f"{bot_id}.log", "a")
-        lf.write(f"\n[{time.strftime('%Y-%m-%d %H:%M:%S')}] \u2550\u2550 BOT STARTED \u2550\u2550\n")
+        lf.write(f"\n[{time.strftime('%Y-%m-%d %H:%M:%S')}] ══ BOT STARTED ══\n")
         lf.flush()
         _BLOCKED = {"BOT_TOKEN", "SESSION_SECRET", "DATABASE_URL", "REPLIT_DB_URL"}
         env = {k: v for k, v in os.environ.items() if k not in _BLOCKED}
         proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=lf, stderr=lf, preexec_fn=os.setsid)
         running_bots[bot_id].update(process=proc, pid=proc.pid, start_time=time.time())
         save_state()
-        return True, f"Started \u2014 PID {proc.pid}"
+        return True, f"Started — PID {proc.pid}"
     except Exception as e:
         return False, f"Error: {e}"
 
 
-def stop_bot(bot_id: str) -> tuple:
+def stop_bot(bot_id: str) -> tuple[bool, str]:
     if bot_id not in running_bots: return False, "Bot nahi mila."
     proc = running_bots[bot_id].get("process")
     if proc is None or proc.poll() is not None:
@@ -365,7 +365,7 @@ def stop_bot(bot_id: str) -> tuple:
         return False, f"Error: {e}"
 
 
-def restart_bot(bot_id: str) -> tuple:
+def restart_bot(bot_id: str) -> tuple[bool, str]:
     stop_bot(bot_id)
     time.sleep(0.8)
     running_bots[bot_id]["auto_restart"] = True
@@ -392,7 +392,7 @@ def fmt_uptime(s: float) -> str:
 #  CRASH WATCHDOG
 # ══════════════════════════════════════════════════════════════
 
-_crash_ts: dict = {}
+_crash_ts: dict[str, list[float]] = {}
 _CRASH_WIN, _CRASH_MAX = 60, 5
 
 
@@ -420,7 +420,7 @@ def watchdog_loop():
                     running_bots[bid]["was_running"]  = False
                     _crash_ts.pop(bid, None)
                     save_state()
-                    print(f"[WATCHDOG] {bid} crash-loop \u2192 disabled", flush=True)
+                    print(f"[WATCHDOG] {bid} crash-loop → disabled", flush=True)
                     if uid:
                         crash_notifications.append({
                             "uid": int(uid), "name": info["name"], "bid": bid,
@@ -428,7 +428,7 @@ def watchdog_loop():
                         })
                     continue
 
-                print(f"[WATCHDOG] {bid} crash #{recent} \u2192 restarting", flush=True)
+                print(f"[WATCHDOG] {bid} crash #{recent} → restarting", flush=True)
                 if uid:
                     crash_notifications.append({
                         "uid": int(uid), "name": info["name"], "bid": bid,
@@ -443,7 +443,7 @@ def watchdog_loop():
 
 def auto_start_bots() -> int:
     if os.environ.get("DISABLE_AUTOSTART", "").strip() in ("1", "true", "yes"):
-        print("\u26a0\ufe0f  DISABLE_AUTOSTART \u2014 skipping.", flush=True); return 0
+        print("⚠️  DISABLE_AUTOSTART — skipping.", flush=True); return 0
     n = 0
     for bid, info in running_bots.items():
         if info.get("was_running") or info.get("auto_restart", True):
@@ -459,24 +459,24 @@ async def send_crash_notifications(ctx: ContextTypes.DEFAULT_TYPE):
         uid = n.get("uid")
         if not uid: continue
         log = n.get("log", "").strip()
-        if len(log) > 900: log = "\u2026" + log[-900:]
+        if len(log) > 900: log = "…" + log[-900:]
         loop = n.get("loop", False)
         try:
             await ctx.bot.send_message(
                 chat_id=uid,
                 text=(
-                    f"{'\U0001f534 Crash Loop \u2014 Auto-Restart OFF' if loop else '\u26a0\ufe0f Bot Crashed & Restarted'}\n"
-                    f"\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n"
-                    f"\U0001f4db *{n['name']}*\n"
-                    f"\U0001f194 `{n['bid']}`\n"
-                    f"\U0001f4a5 Exit: `{n.get('code','?')}`\n"
-                    + ("\U0001f6d1 Auto-restart DISABLED \u2014 code fix karo.\n" if loop else "\U0001f504 Auto-restarted \u2705\n")
-                    + f"\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n```\n{log or '(empty)'}\n```"
+                    f"{'🔴 Crash Loop — Auto-Restart OFF' if loop else '⚠️ Bot Crashed & Restarted'}\n"
+                    f"━━━━━━━━━━━━━━━━━━━━\n"
+                    f"📛 *{n['name']}*\n"
+                    f"🆔 `{n['bid']}`\n"
+                    f"💥 Exit: `{n.get('code','?')}`\n"
+                    + ("🛑 Auto-restart DISABLED — code fix karo.\n" if loop else "🔄 Auto-restarted ✅\n")
+                    + f"━━━━━━━━━━━━━━━━━━━━\n```\n{log or '(empty)'}\n```"
                 ),
                 parse_mode="Markdown",
                 reply_markup=InlineKeyboardMarkup([
-                    [btn_primary("\U0001f4cb View Logs", f"logs_{n['bid']}"),
-                     btn_success("\U0001f504 Restart", f"restart_{n['bid']}") if loop else btn_plain("", "noop")]
+                    [btn_primary("📋 View Logs", f"logs_{n['bid']}"),
+                     btn_success("🔄 Restart", f"restart_{n['bid']}") if loop else btn_plain("", "noop")]
                 ]),
             )
         except Exception: pass
@@ -485,7 +485,7 @@ async def send_crash_notifications(ctx: ContextTypes.DEFAULT_TYPE):
 #  BOT LIST BUILDER
 # ══════════════════════════════════════════════════════════════
 
-def build_bot_list(uid: int) -> tuple:
+def build_bot_list(uid: int) -> tuple[str | None, list | None]:
     bots = {bid: i for bid, i in running_bots.items()
             if is_admin(uid) or i.get("uploaded_by") == uid}
     if not bots: return None, None
@@ -493,13 +493,33 @@ def build_bot_list(uid: int) -> tuple:
     plan    = PLANS[get_user_plan(uid)]
     used    = get_user_bot_count(uid)
     lim     = plan["limit"]
-    ls      = "\u221e" if lim == -1 else str(lim)
+    ls      = "∞" if lim == -1 else str(lim)
     label   = "All Bots" if is_admin(uid) else "My Bots"
 
-    txt = f"\U0001f48e *{label}*   {plan['emoji']} `{used}/{ls}`\n{'\u2501'*22}\n\n"
+    txt = f"💎 *{label}*   {plan['emoji']} `{used}/{ls}`\n{'━'*22}\n\n"
     kb  = []
     for bid, info in bots.items():
         st  = get_status(bid)
-        em  = "\U0001f7e2" if st == "running" else "\U0001f534"
-        up  = fmt_uptime(time.time() - info["start_time"]) if st == "running" and info.get("start_time") else "\u2014"
-        own = f"  \U0001f464`{info.get('uploaded_by','?')}`" i
+        em  = "🟢" if st == "running" else "🔴"
+        up  = fmt_uptime(time.time() - info["start_time"]) if st == "running" and info.get("start_time") else "—"
+        own = f"  👤`{info.get('uploaded_by','?')}`" if is_admin(uid) else ""
+        cc  = info.get("crash_count", 0)
+        crash_note = f"  💥×{cc}" if cc > 0 else ""
+        txt += f"{em} *{info['name']}*{own}{crash_note}\n   ⏱ `{up}`  ·  `{bid}`\n\n"
+        row = []
+        if st == "running":
+            row.append(btn_danger("⏹ Stop", f"toggle_{bid}"))
+        else:
+            row.append(btn_success("▶️ Start", f"toggle_{bid}"))
+        row.append(btn_primary("🔄 Restart", f"restart_{bid}"))
+        row.append(btn_plain("📋 Logs", f"logs_{bid}"))
+        row.append(btn_danger("🗑", f"delete_{bid}"))
+        kb.append(row)
+    kb.append([btn_primary("🏠 Main Menu", "nav_menu")])
+    return txt, kb
+
+# ══════════════════════════════════════════════════════════════
+#  MENUS
+# ══════════════════════════════════════════════════════════════
+
+def user_menu(uid: int
