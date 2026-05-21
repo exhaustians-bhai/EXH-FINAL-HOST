@@ -77,7 +77,7 @@ def start_keepalive():
 #  PLANS
 # ══════════════════════════════════════════════════════════════
 
-PLANS: dict[str, dict] = {
+PLANS: dict = {
     "free":      {"limit": 4,  "price": 0,   "label": "Free",      "emoji": "🆓"},
     "starter":   {"limit": 6,  "price": 100,  "label": "Starter",   "emoji": "🥉"},
     "pro":       {"limit": 15, "price": 200,  "label": "Pro",       "emoji": "🥈"},
@@ -257,7 +257,7 @@ def get_status(bot_id: str) -> str:
     return "stopped"
 
 
-def start_bot(bot_id: str) -> tuple[bool, str]:
+def start_bot(bot_id: str) -> tuple:
     if bot_id not in running_bots: return False, "Bot nahi mila."
     info = running_bots[bot_id]
     p = Path(info["path"])
@@ -286,7 +286,7 @@ def start_bot(bot_id: str) -> tuple[bool, str]:
         return False, f"Error: {e}"
 
 
-def stop_bot(bot_id: str) -> tuple[bool, str]:
+def stop_bot(bot_id: str) -> tuple:
     if bot_id not in running_bots: return False, "Bot nahi mila."
     proc = running_bots[bot_id].get("process")
     if proc is None or proc.poll() is not None:
@@ -303,7 +303,7 @@ def stop_bot(bot_id: str) -> tuple[bool, str]:
         return False, f"Error: {e}"
 
 
-def restart_bot(bot_id: str) -> tuple[bool, str]:
+def restart_bot(bot_id: str) -> tuple:
     stop_bot(bot_id)
     time.sleep(0.8)
     running_bots[bot_id]["auto_restart"] = True
@@ -330,7 +330,7 @@ def fmt_uptime(s: float) -> str:
 #  CRASH WATCHDOG
 # ══════════════════════════════════════════════════════════════
 
-_crash_ts: dict[str, list[float]] = {}
+_crash_ts: dict = {}
 _CRASH_WIN, _CRASH_MAX = 60, 5
 
 
@@ -423,7 +423,7 @@ async def send_crash_notifications(ctx: ContextTypes.DEFAULT_TYPE):
 #  BOT LIST BUILDER
 # ══════════════════════════════════════════════════════════════
 
-def build_bot_list(uid: int) -> tuple[str | None, list | None]:
+def build_bot_list(uid: int) -> tuple:
     bots = {bid: i for bid, i in running_bots.items()
             if is_admin(uid) or i.get("uploaded_by") == uid}
     if not bots: return None, None
@@ -519,4 +519,7 @@ async def nav_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     # ── My Bots ──
     elif action == "bots":
         txt, kb = build_bot_list(user.id)
-        if tx
+        if txt is None:
+            try:
+                await q.edit_message_text(
+                
